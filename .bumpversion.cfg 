@@ -1,0 +1,16 @@
+[bumpversion]
+current_version = 1.0.0
+tag = False
+commit = False
+
+[bumpversion:file:CMakeLists.txt]
+search = VERSION {current_version}
+replace = VERSION {new_version}
+
+[bumpversion:file:package.json]
+search = "version": "{current_version}"
+replace = "version": "{new_version}"
+
+[bumpversion:file:CITATION.cff]
+search = version: {current_version}
+replace = version: {new_version}

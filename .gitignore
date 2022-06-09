@@ -1,0 +1,10 @@
+.DS_Store
+CMakeUserPresets.json
+package-lock.json
+Builds/
+Cache/
+.cache/
+Testing/
+doc/
+__pycache__/
+node_modules/

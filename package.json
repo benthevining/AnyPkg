@@ -1,0 +1,152 @@
+{
+  "author": {
+    "email": "ben.the.vining@gmail.com",
+    "name": "Ben Vining"
+  },
+  "dependencies": {
+    "@semantic-release/changelog": "6.0.1",
+    "@semantic-release/exec": "6.0.3",
+    "@semantic-release/git": "10.0.1",
+    "conventional-changelog-conventionalcommits": "5.0.0",
+    "semantic-release": "19.0.2"
+  },
+  "description": "Package manager manager",
+  "homepage": "https://github.com/benthevining/AnyPackage",
+  "keywords": [
+    "build",
+    "utility",
+    "package_manager"
+  ],
+  "license": "GPL3",
+  "name": "AnyPackage",
+  "release": {
+    "branches": [
+      "main"
+    ],
+    "plugins": [
+      [
+        "@semantic-release/commit-analyzer",
+        {
+          "preset": "conventionalcommits",
+          "presetConfig": {
+            "types": [
+              {
+                "section": "Bug Fixes",
+                "type": "fix"
+              },
+              {
+                "section": "Features",
+                "type": "feat"
+              },
+              {
+                "hidden": true,
+                "type": "chore"
+              },
+              {
+                "hidden": true,
+                "type": "docs"
+              },
+              {
+                "hidden": true,
+                "type": "style"
+              },
+              {
+                "hidden": true,
+                "type": "refactor"
+              },
+              {
+                "hidden": true,
+                "type": "test"
+              },
+              {
+                "hidden": true,
+                "type": "ci"
+              }
+            ]
+          }
+        }
+      ],
+      [
+        "@semantic-release/release-notes-generator",
+        {
+          "preset": "conventionalcommits",
+          "presetConfig": {
+            "types": [
+              {
+                "section": "Bug Fixes",
+                "type": "fix"
+              },
+              {
+                "section": "Features",
+                "type": "feat"
+              },
+              {
+                "hidden": true,
+                "type": "chore"
+              },
+              {
+                "hidden": true,
+                "type": "docs"
+              },
+              {
+                "hidden": true,
+                "type": "style"
+              },
+              {
+                "hidden": true,
+                "type": "refactor"
+              },
+              {
+                "hidden": true,
+                "type": "test"
+              },
+              {
+                "hidden": true,
+                "type": "ci"
+              }
+            ]
+          }
+        }
+      ],
+      [
+        "@semantic-release/changelog",
+        {
+          "changelogFile": "CHANGELOG.md",
+          "changelogTitle": "# AnyPackage changelog"
+        }
+      ],
+      [
+        "@semantic-release/exec",
+        {
+          "prepareCmd": "bumpversion --allow-dirty --no-commit --no-tag --new-version \"${nextRelease.version}\" patch"
+        }
+      ],
+      [
+        "@semantic-release/git",
+        {
+          "assets": [
+            "CHANGELOG.md",
+            ".bumpversion.cfg",
+            "CMakeLists.txt",
+            "package.json",
+            "CITATION.cff"
+          ]
+        }
+      ],
+      [
+        "@semantic-release/github",
+        {
+          "assets": [
+            {
+              "label": "Changelog",
+              "path": "CHANGELOG.md"
+            }
+          ]
+        }
+      ]
+    ],
+    "repositoryUrl": "http://github.com/benthevining/AnyPackage.git"
+  },
+  "repository": "http://github.com/benthevining/AnyPackage",
+  "version": "1.0.0"
+}
