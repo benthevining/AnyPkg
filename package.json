@@ -18,7 +18,7 @@
     "package_manager"
   ],
   "license": "GPL3",
-  "name": "AnyPackage",
+  "name": "AnyPkg",
   "release": {
     "branches": [
       "main"
@@ -112,7 +112,7 @@
         "@semantic-release/changelog",
         {
           "changelogFile": "CHANGELOG.md",
-          "changelogTitle": "# AnyPackage changelog"
+          "changelogTitle": "# AnyPkg changelog"
         }
       ],
       [
@@ -145,8 +145,8 @@
         }
       ]
     ],
-    "repositoryUrl": "http://github.com/benthevining/AnyPackage.git"
+    "repositoryUrl": "http://github.com/benthevining/AnyPkg.git"
   },
-  "repository": "http://github.com/benthevining/AnyPackage",
+  "repository": "http://github.com/benthevining/AnyPkg",
   "version": "1.0.0"
 }

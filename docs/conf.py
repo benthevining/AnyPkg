@@ -9,9 +9,6 @@
 
 # pylint: skip-file
 
-from sys import path as sys_path
-
-
 source_suffix = '.rst'
 root_doc = 'index'
 

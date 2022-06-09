@@ -1,5 +1,5 @@
 cff-version: 1.2.0
-title: AnyPackage
+title: AnyPkg
 message: If you use this software, please cite it using the metadata from this file.
 type: software
 authors:
@@ -7,4 +7,4 @@ authors:
   family-names: Vining
   email: ben.the.vining@gmail.com
 version: 1.0.0
-url: "https://github.com/benthevining/AnyPackage"
+url: "https://github.com/benthevining/AnyPkg"

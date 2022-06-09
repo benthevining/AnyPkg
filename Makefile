@@ -1,3 +1,11 @@
+# ========================================
+#  ____  _     ___  _ ____  _  __ _____
+# /  _ \/ \  /|\  \///  __\/ |/ //  __/
+# | / \|| |\ || \  / |  \/||   / | |  _
+# | |-||| | \|| / /  |  __/|   \ | |_//
+# \_/ \|\_/  \|/_/   \_/   \_|\_\\____\
+# ========================================
+
 SHELL := /bin/sh
 .ONESHELL:
 .SHELLFLAGS: -euo
@@ -17,6 +25,8 @@ GIT ?= git
 ASDF ?= asdf
 PYTHON ?= python3
 
+override ANYPKG_ROOT = $(patsubst %/,%,$(strip $(dir $(realpath $(firstword $(MAKEFILE_LIST))))))
+
 # directory aliases
 BUILD_DIR ?= $(ANYPKG_ROOT)/Builds
 DOCS_DIR ?= $(ANYPKG_ROOT)/doc
@@ -31,10 +41,6 @@ else # Linux
 	export CMAKE_BUILD_PARALLEL_LEVEL ?= $(shell grep -c ^processor /proc/cpuinfo)
 	SUDO ?= sudo
 endif
-
-#
-
-override ANYPKG_ROOT = $(patsubst %/,%,$(strip $(dir $(realpath $(firstword $(MAKEFILE_LIST))))))
 
 #
 
@@ -55,7 +61,7 @@ init:  ## Initializes the workspace and installs all dependencies
 #
 
 $(BUILD_DIR):
-	@cd $(ANYPKG_ROOT) && $(CMAKE) --preset default
+	$(CMAKE) -S $(ANYPKG_ROOT) -B $(BUILD_DIR)
 
 .PHONY: config
 config: $(BUILD_DIR) ## configure CMake
@@ -64,7 +70,7 @@ config: $(BUILD_DIR) ## configure CMake
 
 .PHONY: build
 build: config ## runs CMake build
-	@cd $(ANYPKG_ROOT) && $(CMAKE) --build --preset default
+	$(CMAKE) --build $(BUILD_DIR)
 
 #
 
@@ -72,20 +78,18 @@ build: config ## runs CMake build
 install: build ## runs CMake install
 	$(SUDO) $(CMAKE) --install $(BUILD_DIR)
 
-.PHONY: pack
-pack: build ## Creates a CPack installer
-	@$(CMAKE) --build $(BUILD_DIR) --target package
-
 #
 
 .PHONY: pc
 pc:  ## Runs all pre-commit hooks over all files
-	@cd $(ANYPKG_ROOT) && $(GIT) add . && $(PRECOMMIT) run --all-files
+	@cd $(ANYPKG_ROOT) \
+	 && $(GIT) add . \
+	 && $(PRECOMMIT) run --all-files
 
 #
 
 $(DOCS_DIR): config
-	@cd $(ANYPKG_ROOT) && $(CMAKE) --build --preset docs
+	$(CMAKE) --build $(BUILD_DIR) --target AnyPkgDocs
 
 .PHONY: docs
 docs: $(DOCS_DIR) ## Builds the documentation

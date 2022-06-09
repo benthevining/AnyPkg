@@ -11,10 +11,10 @@ include_guard (GLOBAL)
 cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
 project (
-    AnyPackage
+    AnyPkg
     VERSION 1.1.0
     DESCRIPTION "Package manager manager"
-    HOMEPAGE_URL "www.github.com/benthevining/AnyPackage"
+    HOMEPAGE_URL "www.github.com/benthevining/AnyPkg"
     LANGUAGES NONE)
 
 if (PROJECT_IS_TOP_LEVEL)

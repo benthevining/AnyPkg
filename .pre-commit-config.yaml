@@ -35,7 +35,6 @@ repos:
       hooks:
           - id: check-json
           - id: check-yaml
-          - id: check-toml
           - id: pretty-format-json
             args: [--autofix]
 
@@ -113,24 +112,6 @@ repos:
       hooks:
           - id: markdownlint-fix
             exclude: CHANGELOG.md
-
-  # TOML
-    - repo: https://github.com/pappasam/toml-sort
-      rev: v0.20.0
-      hooks:
-          - id: toml-sort
-            args: [--in-place, --all]
-
-  # shell scripts
-    - repo: https://github.com/shellcheck-py/shellcheck-py
-      rev: v0.8.0.4
-      hooks:
-          - id: shellcheck
-    - repo: https://github.com/lovesegfault/beautysh
-      rev: v6.2.1
-      hooks:
-          - id: beautysh
-            args: [--tab]
 
   # Python
     - repo: https://github.com/asottile/pyupgrade
