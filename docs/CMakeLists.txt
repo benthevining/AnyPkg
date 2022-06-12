@@ -47,14 +47,6 @@ if (NOT SPHINX_EXECUTABLE)
     return ()
 endif ()
 
-if (NOT TARGET Python3::Interpreter)
-    if (AnyPkg_IS_TOP_LEVEL)
-        message (WARNING "Python interpreter cannot be found, AnyPkg docs cannot be built!")
-    endif ()
-
-    return ()
-endif ()
-
 #
 
 set (conf_path "${CMAKE_CURRENT_LIST_DIR}")

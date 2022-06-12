@@ -12,6 +12,12 @@
 from typing import Final
 from sys import platform
 
+from apk import APK
+from apt import Apt
+from apt_get import Apt_Get
+from brew import Brew
+from choco import Choco
+
 
 SYSTEM_PKG_MGR_NAMES: Final[list[str]] = [
     "apk", "apt", "apt-get", "brew", "choco"
@@ -23,8 +29,23 @@ PREFERRED_SYS_PKG_MGR: str = None
 
 
 def __create_sys_pkg_mgr(name: str) -> PackageManager:
-	pass
+	if name == "apk":
+		return APK()
 
+	if name == "apt":
+		return Apt()
+
+	if name == "apt-get":
+		return Apt_Get()
+
+	if name == "brew":
+		return Brew()
+
+	if name == "choco":
+		return Choco()
+
+	raise RuntimeError(f"Unknown system package manager {name} requested. \
+		Valid options are {", ".join(SYSTEM_PKG_MGR_NAMES)}.")
 
 #
 
@@ -35,7 +56,7 @@ def create_system_pkg_manager() -> PackageManager:
 	if PREFERRED_SYS_PKG_MGR is not None:
 		if not PREFERRED_SYS_PKG_MGR in SYSTEM_PKG_MGR_NAMES:
 			raise RuntimeError(
-			    f"Unknown system package manager {PREFERRED_SYS_PKG_MGR} requested! Valid names are {",
+			    f"Unknown system package manager {PREFERRED_SYS_PKG_MGR} requested! Valid names are {",\
 			    ".join(SYSTEM_PKG_MGR_NAMES)}")
 
 		return __create_sys_pkg_mgr(PREFERRED_SYS_PKG_MGR)

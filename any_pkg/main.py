@@ -15,22 +15,62 @@ import os
 from sys import argv as script_arg_count
 
 from pkg_managers.system.factory import SYSTEM_PKG_MGR_NAMES, PREFERRED_SYS_PKG_MGR
-from pkg_managers.package_manager import PKG_MGR_INIT_UPDATES
+from pkg_managers.package_manager import PKG_MGR_INIT_UPDATES, PackageManager
+from pkg_managers.factory import create_and_initialize_package_manager
+
+from packages.packages import PackageSet, get_all_pkg_sets_in_file
 
 #
 
 
 def install_packages(config_file: str,
-                     pkg_set: str,
+                     pkg_set: str=None,
                      log_file: str = None,
                      sys_pkg_mgr: str = None,
                      no_updates: bool = False) -> None:
+	# initialize log file
+
 	if no_updates:
 		PKG_MGR_INIT_UPDATES = False
 
 	if sys_pkg_mgr is not None:
 		PREFERRED_SYS_PKG_MGR = sys_pkg_mgr
 
+	if not os.path.isabs(config_file):
+		config_file = os.path.join(os.getcwd(), config_file)
+
+	# create an array of PackageSet objects describing every package set in the config file
+	pkg_sets: Final[list[PackageSet]] = get_all_pkg_sets_in_file(config_file)
+
+	# determine the root package set to install - if the user specified one, or if the config file specifies a default
+	root_pkg_set: Final[PackageSet] = get_root_pkg_set(pkg_sets=pkg_sets,
+		config_file=config_file,
+		pkg_set=pkg_set)
+
+	# resolve transitively the list of all package sets to be installed
+	ps_list: Final[list[PackageSet]] = list(set(root_pkg_set.resolve_dependencies(pkg_sets, config_file)))
+
+	# now construct a list of names of package managers that the package sets to be installed will need
+	pm_list: list[str] = []
+
+	for ps in ps_list:
+		pm_list.append(ps.get_list_of_package_managers())
+	pm_list = list(set(pm_list))
+
+	# now construct an array of actual PackageManager instances based on the list of names
+	package_mgrs: list[PackageManager] = []
+
+	for pm_name in pm_list:
+		package_mgrs.append(create_and_initialize_package_manager(pm_name))
+
+	# install each package set
+	for ps in ps_list:
+		ps.install(package_mgrs)
+
+#
+
+def update_all_packages() -> None:
+	pass
 
 #
 

@@ -12,7 +12,7 @@ cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
 project (
     AnyPkg
-    VERSION 1.1.0
+    VERSION 1.0.0
     DESCRIPTION "Package manager manager"
     HOMEPAGE_URL "www.github.com/benthevining/AnyPkg"
     LANGUAGES NONE)
@@ -39,6 +39,10 @@ option (ANYPKG_BUILD_DOCS "Build the documentation" "${PROJECT_IS_TOP_LEVEL}")
 mark_as_advanced (ANYPKG_BUILD_DOCS)
 
 enable_testing ()
+
+find_package (Python3 3.9 REQUIRED COMPONENTS Interpreter)
+
+add_subdirectory (any_pkg)
 
 if (ANYPKG_BUILD_DOCS)
     add_subdirectory (docs)

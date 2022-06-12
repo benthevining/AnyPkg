@@ -38,6 +38,12 @@ class PackageManager:
 				    f"System package manager {get_name()}: Package {pair[0]} @ {pair[1]} failed to install!"
 				)
 
+	def accepts_config_files() -> bool:
+		return False
+
+	def process_config_file(self, filepath) -> bool:
+		return False
+
 
 #
 

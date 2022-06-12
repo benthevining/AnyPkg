@@ -3,6 +3,10 @@ current_version = 1.0.0
 tag = False
 commit = False
 
+[bumpversion:file:setup.cfg]
+search = version = {current_version}
+replace = version = {new_version}
+
 [bumpversion:file:CMakeLists.txt]
 search = VERSION {current_version}
 replace = VERSION {new_version}
