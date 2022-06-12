@@ -22,6 +22,11 @@ add_custom_target (
     VERBATIM USES_TERMINAL
     SOURCES ${anypkg_sources})
 
-# python -m pip install dist/meowpkg-0.0.1.whl OR python -m pip install dist/meowpkg-0.0.1.tar.gz
+install (CODE "${Python3_EXECUTABLE} -m pip install dist/AnyPkg-${PROJECT_VERSION}.whl"
+         COMPONENT anypkg)
+
+include (CPackComponent)
+
+cpack_add_component (anypkg DISPLAY_NAME AnyPkg DESCRIPTION "A package manager manager")
 
 source_group (TREE "${CMAKE_CURRENT_LIST_DIR}" PREFIX any_pkg FILES ${anypkg_sources})

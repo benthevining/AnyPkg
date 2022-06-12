@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+"""
+This module is the main entrypoint for AnyPkg.
+"""
 
 # ========================================
 #  ____  _     ___  _ ____  _  __ _____
@@ -26,12 +29,14 @@ from packages.packages import PackageSet, get_all_pkg_sets_in_file
 def install_packages(config_file: str,
                      pkg_set: str=None,
                      log_file: str = None,
-                     sys_pkg_mgr: str = None,
-                     no_updates: bool = False) -> None:
-	# initialize log file
+                     sys_pkg_mgr: str = None) -> None:
+	"""
+	Installs packages.
 
-	if no_updates:
-		PKG_MGR_INIT_UPDATES = False
+	This function is the main entrypoint for installing a workspace with AnyPkg.
+	"""
+
+	# initialize log file
 
 	if sys_pkg_mgr is not None:
 		PREFERRED_SYS_PKG_MGR = sys_pkg_mgr
@@ -70,6 +75,9 @@ def install_packages(config_file: str,
 #
 
 def update_all_packages() -> None:
+	"""
+	Updates all packages.
+	"""
 	pass
 
 #
@@ -123,17 +131,6 @@ def __create_parser() -> ArgumentParser:
 	    f"Name of the preferred system package manager. Valid names are: {SYSTEM_PKG_MGR_NAMES}"
 	)
 
-	parser.add_argument(
-	    "--no-update",
-	    "-n",
-	    action="store_true",
-	    dest="no_updates",
-	    required=False,
-	    default=False,
-	    help=
-	    "Don't update each package manager's installed packages before installing new ones. The default behavior is to update all packages before installing new ones."
-	)
-
 	return parser
 
 
@@ -141,6 +138,10 @@ def __create_parser() -> ArgumentParser:
 
 
 def main():
+	"""
+	AnyPkg's main method.
+	"""
+
 	my_parser = __create_parser()
 
 	if len(script_arg_count) < 2:
@@ -151,8 +152,7 @@ def main():
 		install_packages(config_file=args.config_file,
 		                 pkg_set=args.pkg_set,
 		                 log_file=args.log_file,
-		                 sys_pkg_mgr=args.sys_pkg_mgr,
-		                 no_updates=args.no_updates)
+		                 sys_pkg_mgr=args.sys_pkg_mgr)
 
 
 #

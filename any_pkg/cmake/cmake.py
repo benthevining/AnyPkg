@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+"""
+This module implements a built-in CMake package manager.
+"""
 
 # ========================================
 #  ____  _     ___  _ ____  _  __ _____
@@ -14,6 +17,9 @@ from package import Package
 #
 
 def check_if_package_is_already_available(pkg:Package) -> bool:
+	"""
+	Returns true if the given package is already available on the system.
+	"""
 
 	# generate a CMakeLists.txt
 		# @PKG_NAME@
@@ -27,6 +33,9 @@ def check_if_package_is_already_available(pkg:Package) -> bool:
 #
 
 def install_package(pkg:Package) -> str:
+	"""
+	Installs the given CMake package.
+	"""
 
 	if check_if_package_is_already_available(pkg):
 		return None
@@ -44,6 +53,9 @@ def install_package(pkg:Package) -> str:
 #
 
 def install_packages(pkgs: list[Package]) -> list[str]:
+	"""
+	Installs multiple CMake packages at once.
+	"""
 
 	install_dirs: list[str] = []
 
@@ -53,4 +65,5 @@ def install_packages(pkgs: list[Package]) -> list[str]:
 		if install_dir is not None:
 			install_dirs.append(install_dir)
 
-	return install_dirs
+	# remove duplicates
+	return list(set(install_dirs))

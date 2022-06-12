@@ -14,7 +14,7 @@ from sys import platform
 
 from apk import APK
 from apt import Apt
-from apt_get import Apt_Get
+from apt_get import AptGet
 from brew import Brew
 from choco import Choco
 
@@ -36,7 +36,7 @@ def __create_sys_pkg_mgr(name: str) -> PackageManager:
 		return Apt()
 
 	if name == "apt-get":
-		return Apt_Get()
+		return AptGet()
 
 	if name == "brew":
 		return Brew()
@@ -44,8 +44,7 @@ def __create_sys_pkg_mgr(name: str) -> PackageManager:
 	if name == "choco":
 		return Choco()
 
-	raise RuntimeError(f"Unknown system package manager {name} requested. \
-		Valid options are {", ".join(SYSTEM_PKG_MGR_NAMES)}.")
+	raise RuntimeError(f"Unknown system package manager {name} requested. Valid options are {", ".join(SYSTEM_PKG_MGR_NAMES)}.")
 
 #
 

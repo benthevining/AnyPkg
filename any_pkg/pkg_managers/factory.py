@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+"""
+This module is a factory for PackageManager objects.
+"""
 
 # ========================================
 #  ____  _     ___  _ ____  _  __ _____
@@ -13,18 +16,25 @@ from typing import Final
 
 from system.factory import create_system_pkg_manager, create_and_initialize_system_pkg_manager
 from package_manager import PackageManager, init_package_manager
+from language.gem import Gem
+from language.npm import NPM
+from language.pip import Pip
 from asdf import ASDF
-from gem import Gem
-from npm import NPM
-from pip import Pip
 
 
 PKG_MGR_VALID_TYPES: Final[list[str]] = ["system", "pip", "gem", "asdf", "npm"]
+"""
+The list of valid package manager names.
+"""
 
 #
 
 
-def create_package_manager(name):
+def create_package_manager(name) -> PackageManager:
+	"""
+	Creates a PackageManager object for the package manager with the given name.
+	"""
+
 	if name == "system":
 		return create_system_pkg_manager()
 
@@ -37,7 +47,7 @@ def create_package_manager(name):
 	if name == "asdf":
 		return ASDF()
 
-	if name == "npm"
+	if name == "npm":
 		return NPM()
 
 	raise RuntimeError(
@@ -48,6 +58,10 @@ def create_package_manager(name):
 
 
 def create_and_initialize_package_manager(name):
+	"""
+	Creates and initializes a PackageManager object for the package manager with the given name.
+	"""
+
 	if name == "system":
 		return create_and_initialize_system_pkg_manager()
 

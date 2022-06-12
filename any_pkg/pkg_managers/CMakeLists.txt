@@ -7,10 +7,12 @@
 # ========================================
 
 add_subdirectory (system)
+add_subdirectory (language)
 
 set (
     pkg_managers_files
     ${system_files}
+    ${language_files}
     asdf.py
     factory.py
     gem.py
