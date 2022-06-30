@@ -12,11 +12,10 @@ This module defines the PackageManager interface class.
 # \_/ \|\_/  \|/_/   \_/   \_|\_\\____\
 # ========================================
 
+from shutil import which
+
 #
 
-
-# - clean up
-# - refresh package registry
 class PackageManager:
 	"""
 	This class is a common interface to any kind of package manager.
@@ -26,7 +25,7 @@ class PackageManager:
 		"""
 		Returns the name of the package manager.
 		"""
-		raise NotImplementedError()
+		raise NotImplementedError
 
 	def get_command() -> str:
 		"""
@@ -40,64 +39,68 @@ class PackageManager:
 		"""
 		Returns true if the package manager is installed.
 		"""
-		raise NotImplementedError()
+		return which(get_command()) is not None
 
-	def install_self(self) -> bool:
+	def install_self() -> None:
 		"""
 		Installs the package manager.
-		"""
-		raise NotImplementedError()
 
-	def update_all_pkgs(self) -> None:
+		The implementation of this method must use the lowest-level system resources as possible, and would preferably be pure Python code with no external
+		dependencies.
+		"""
+		raise NotImplementedError
+
+	def update_all_pkgs() -> None:
 		"""
 		Updates all the packages this package manager manages.
 		"""
-		raise NotImplementedError()
+		raise NotImplementedError
 
-	def search_for_pkg(self, pkg_name: str, pkg_version: str) -> bool:
+	def refresh_registry() -> None:
+		"""
+		Updates the package manager's package registry.
+		"""
+		raise NotImplementedError
+
+	def search_for_pkg(pkg_name: str, pkg_version: str=None) -> bool:
 		"""
 		Returns true if a matching package can be found in this package manager's registry.
 		"""
-		raise NotImplementedError()
+		raise NotImplementedError
 
-	def install_pkg(self, pkg_name: str, pkg_version: str) -> bool:
+	def is_pkg_installed(pkg_name: str, pkg_version: str=None) -> bool:
+		"""
+		Returns true if the given package is installed.
+		"""
+		raise NotImplementedError
+
+	def install_pkg(pkg_name: str, pkg_version: str=None) -> None:
 		"""
 		Installs the requested package.
 		"""
-		raise NotImplementedError()
+		raise NotImplementedError
 
-	def install_pkgs(self, pkgs: list[tuple[str, str]]) -> bool:
+	def install_pkgs(pkgs: list[tuple[str, str]]) -> None:
 		"""
 		Installs multiple packages at once.
 		"""
 		for pair in pkgs:
-			if not install_pkg(pair[0], pair[1]):
-				raise RuntimeError(
-				    f"System package manager {get_name()}: Package {pair[0]} @ {pair[1]} failed to install!"
-				)
+			install_pkg(pair[0], pair[1])
 
 	def accepts_config_files() -> bool:
 		"""
-		Returns true if this package manager can be fed an external configuration file (like a Brewfile, requirements.txt, package.json, etc).
+		Returns true if this package manager can be fed an external configuration file (like a Brewfile, requirements.txt, package.json, Gemfile, etc).
 		"""
 		return False
 
-	def process_config_file(self, filepath) -> bool:
+	def process_config_file(filepath) -> None:
 		"""
 		Processes an external configuration file.
 		"""
-		return False
+		raise NotImplementedError
 
-
-#
-
-
-def init_package_manager(pkg_mgr: PackageManager) -> None:
-	"""
-	Installs the package manager, if it isn't already installed.
-	"""
-
-	print(f"Initializing package manager {pkg_mgr.get_name()}...")
-
-	if not pkg_mgr.is_installed():
-		pkg_mgr.install_self()
+	def clean_up() -> None:
+		"""
+		Cleans up any build artefacts or temporary files the package manager may have lying around.
+		"""
+		raise NotImplementedError

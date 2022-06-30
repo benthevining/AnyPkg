@@ -13,6 +13,7 @@ This module defines the interface for the npm package manager.
 # ========================================
 
 from package_manager import PackageManager
+from utils.shell import execute
 
 class NPM(PackageManager):
 	"""
@@ -25,44 +26,73 @@ class NPM(PackageManager):
 		"""
 		return "npm"
 
-	def is_installed() -> bool:
-		"""
-		Returns true if npm is installed on the system.
-		"""
-		return False
-
-	def install_self(self) -> bool:
+	def install_self() -> bool:
 		"""
 		Installs npm on the system.
 		"""
 		raise NotImplementedError()
 
-	def update_all_pkgs(self) -> None:
+	def update_all_pkgs() -> None:
 		"""
 		Updates the npm package registry and upgrades any outdated packages.
 		"""
-		raise NotImplementedError()
+		execute("npm update -g")
+		execute("npm update")
 
-	def search_for_pkg(self, pkg_name: str, pkg_version: str) -> bool:
+	def refresh_registry() -> None:
+		"""
+		Refreshes the npm package index.
+		"""
+		execute("npm ping")
+
+	def search_for_pkg(pkg_name: str, pkg_version: str=None) -> bool:
 		"""
 		Updates the npm package registry and returns true if the given package can be found in the registry.
 		"""
+		refresh_registry()
+
+		if pkg_version is None:
+			pkg_spec = pkg_name
+		else:
+			pkg_spec = f"{pkg_name}@{pkg_version}"
+
+		output = execute(f"npm search {pkg_spec}")
+
+		return not output.startswith("No matches found for")
+
+	def is_pkg_installed(pkg_name: str, pkg_version: str=None) -> bool:
+		"""
+		Returns true if the given package is installed.
+		"""
 		raise NotImplementedError()
 
-	def install_pkg(self, pkg_name: str, pkg_version: str) -> bool:
+	def install_pkg(pkg_name: str, pkg_version: str=None) -> None:
 		"""
 		Attempts to install the package using npm.
 		"""
-		raise NotImplementedError()
+		if pkg_version is None:
+			pkg_spec = pkg_name
+		else:
+			pkg_spec = f"{pkg_name}@{pkg_version}"
+
+		execute(f"npm install {pkg_spec}")
 
 	def accepts_config_files() -> bool:
 		"""
 		Returns true.
+
+		npm accepts package.json files.
 		"""
 		return True
 
-	def process_config_file(self, filepath) -> bool:
+	def process_config_file(filepath) -> None:
 		"""
 		Processes a package.json file.
 		"""
-		return False
+		execute("npm install", workdir=os.path.realpath(os.dirname(filepath)))
+
+	def clean_up() -> None:
+		"""
+		Does nothing; npm has no such command.
+		"""
+		pass

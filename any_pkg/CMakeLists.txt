@@ -10,9 +10,10 @@ add_subdirectory (conditionals)
 add_subdirectory (macros)
 add_subdirectory (packages)
 add_subdirectory (pkg_managers)
+add_subdirectory (interpreters)
 
 set (anypkg_sources main.py ${conditionals_files} ${macros_files} ${packages_files}
-                    ${pkg_managers_files})
+                    ${pkg_managers_files} ${interpreters_files})
 
 add_custom_target (
     AnyPkg ALL
