@@ -14,15 +14,16 @@ This module is a factory for PackageManager objects.
 
 from typing import Final
 
-from system.factory import create_system_pkg_manager, create_and_initialize_system_pkg_manager
-from package_manager import PackageManager, init_package_manager
+from system.factory import create_system_pkg_manager
+from package_manager import PackageManager
 from language.gem import Gem
 from language.npm import NPM
 from language.pip import Pip
+from language.cargo import Cargo
 from asdf import ASDF
 
 
-PKG_MGR_VALID_TYPES: Final[list[str]] = ["system", "pip", "gem", "asdf", "npm"]
+PKG_MGR_VALID_TYPES: Final[list[str]] = ["system", "pip", "gem", "npm", "cargo", "asdf"]
 """
 The list of valid package manager names.
 """
@@ -30,7 +31,7 @@ The list of valid package manager names.
 #
 
 
-def create_package_manager(name) -> PackageManager:
+def create_package_manager(name:str) -> PackageManager:
 	"""
 	Creates a PackageManager object for the package manager with the given name.
 	"""
@@ -44,29 +45,30 @@ def create_package_manager(name) -> PackageManager:
 	if name == "gem":
 		return Gem()
 
-	if name == "asdf":
-		return ASDF()
-
 	if name == "npm":
 		return NPM()
 
+	if name == "cargo":
+		return Cargo()
+
+	if name == "asdf":
+		return ASDF()
+
 	raise RuntimeError(
-		    f"Unknown package manager type {name} requested! Valid types are {", \
-                                                ".join(PKG_MGR_VALID_TYPES)}")
+		    f"Unknown package manager type {name} requested! Valid types are {', \
+                                                '.join(PKG_MGR_VALID_TYPES)}")
 
 #
 
 
-def create_and_initialize_package_manager(name):
+def create_and_initialize_package_manager(name:str):
 	"""
 	Creates and initializes a PackageManager object for the package manager with the given name.
 	"""
 
-	if name == "system":
-		return create_and_initialize_system_pkg_manager()
-
 	pkg_mgr: PackageManager = create_package_manager(name)
 
-	init_package_manager(pkg_mgr)
+	if not pkg_mgr.is_installed():
+		pkg_mgr.install_self()
 
 	return pkg_mgr

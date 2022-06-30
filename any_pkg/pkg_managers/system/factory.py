@@ -17,6 +17,7 @@ from apt import Apt
 from apt_get import AptGet
 from brew import Brew
 from choco import Choco
+from package_manager import PackageManager
 
 
 SYSTEM_PKG_MGR_NAMES: Final[list[str]] = [
@@ -44,7 +45,7 @@ def __create_sys_pkg_mgr(name: str) -> PackageManager:
 	if name == "choco":
 		return Choco()
 
-	raise RuntimeError(f"Unknown system package manager {name} requested. Valid options are {", ".join(SYSTEM_PKG_MGR_NAMES)}.")
+	raise RuntimeError(f"Unknown system package manager {name} requested. Valid options are {', '.join(SYSTEM_PKG_MGR_NAMES)}.")
 
 #
 
@@ -55,8 +56,8 @@ def create_system_pkg_manager() -> PackageManager:
 	if PREFERRED_SYS_PKG_MGR is not None:
 		if not PREFERRED_SYS_PKG_MGR in SYSTEM_PKG_MGR_NAMES:
 			raise RuntimeError(
-			    f"Unknown system package manager {PREFERRED_SYS_PKG_MGR} requested! Valid names are {",\
-			    ".join(SYSTEM_PKG_MGR_NAMES)}")
+			    f"Unknown system package manager {PREFERRED_SYS_PKG_MGR} requested! Valid names are {',\
+			    '.join(SYSTEM_PKG_MGR_NAMES)}")
 
 		return __create_sys_pkg_mgr(PREFERRED_SYS_PKG_MGR)
 
@@ -81,6 +82,7 @@ def create_and_initialize_system_pkg_manager() -> PackageManager:
 
 	print(f"Using system package manager: {pkg_mgr.get_name()}")
 
-	init_package_manager(pkg_mgr)
+	if not pkg_mgr.is_installed():
+		pkg_mgr.install_self()
 
 	return pkg_mgr

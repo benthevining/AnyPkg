@@ -37,7 +37,12 @@ class Python(Interpreter):
 		if EXEC_PATH.endswith("python"):
 			return EXEC_PATH
 
-		return os.path.join(os.__file__.split("lib/")[0],"bin","python3")
+		path = os.path.join(os.__file__.split("lib/")[0], "bin", "python3")
+
+		if os.path.exists(path):
+			return path
+
+		return "python3"
 
 	def is_installed() -> bool:
 		"""

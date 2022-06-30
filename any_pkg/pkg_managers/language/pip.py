@@ -70,6 +70,7 @@ class Pip(PackageManager):
 		"""
 		Updates the pip package registry and returns true if the given package can be found in the registry.
 		"""
+		# search feature has been removed from pip, need to find an alternate way...
 		raise NotImplementedError
 
 	def is_pkg_installed(pkg_name: str, pkg_version: str=None) -> bool:

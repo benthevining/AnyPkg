@@ -64,6 +64,7 @@ class NPM(PackageManager):
 		"""
 		Returns true if the given package is installed.
 		"""
+		# npm ls is specific to one directory and fails if any requirements are missing
 		raise NotImplementedError()
 
 	def install_pkg(pkg_name: str, pkg_version: str=None) -> None:

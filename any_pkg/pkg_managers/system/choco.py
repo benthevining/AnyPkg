@@ -12,7 +12,9 @@ This module defines the interface for the Chocolatey package manager.
 # \_/ \|\_/  \|/_/   \_/   \_|\_\\____\
 # ========================================
 
+from shutil import which
 from package_manager import PackageManager
+from utils.shell import execute
 
 class Choco(PackageManager):
 	"""
@@ -25,32 +27,70 @@ class Choco(PackageManager):
 		"""
 		return "choco"
 
-	def is_installed() -> bool:
-		"""
-		Returns true if Chocolatey is installed on the system.
-		"""
-		return False
-
-	def install_self(self) -> bool:
+	def install_self() -> None:
 		"""
 		Installs Chocolatey on the system.
 		"""
-		raise NotImplementedError()
+		if which("choco") is not None:
+			return
 
-	def update_all_pkgs(self) -> None:
+		ps_cmd = """Set-ExecutionPolicy Bypass -Scope Process -Force;
+		[System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072;
+		iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))"""
+
+		execute(f"powershell.exe {ps_cmd}")
+
+	def update_all_pkgs() -> None:
 		"""
 		Updates the Chocolatey package registry and upgrades any outdated packages.
 		"""
-		raise NotImplementedError()
+		execute("choco upgrade all")
 
-	def search_for_pkg(self, pkg_name: str, pkg_version: str) -> bool:
+	def refresh_registry() -> None:
+		"""
+		Does nothing; choco has no such command.
+		"""
+		pass
+
+	def search_for_pkg(pkg_name: str, pkg_version: str=None) -> bool:
 		"""
 		Updates the Chocolatey package registry and returns true if the given package can be found in the registry.
 		"""
 		raise NotImplementedError()
 
-	def install_pkg(self, pkg_name: str, pkg_version: str) -> bool:
+	def is_pkg_installed(pkg_name: str, pkg_version: str=None) -> bool:
+		"""
+		Returns true if the given package is installed.
+		"""
+		raise NotImplementedError
+
+	def install_pkg(pkg_name: str, pkg_version: str=None) -> None:
 		"""
 		Attempts to install the package using Chocolatey.
 		"""
-		raise NotImplementedError()
+		cmd = f"choco install {pkg_name} -y"
+
+		if pkg_version is not None:
+			cmd += f" --version {pkg_version}"
+
+		execute(cmd)
+
+	def accepts_config_files() -> bool:
+		"""
+		Returns true.
+
+		Chocolatey accepts nuspec or nupkg files.
+		"""
+		return True
+
+	def process_config_file(filepath) -> None:
+		"""
+		Processes a nuspec or nupkg file.
+		"""
+		execute(f"choco install {filepath}")
+
+	def clean_up() -> None:
+		"""
+		Does nothing; choco has no such command.
+		"""
+		pass
